@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"strings"
+	"time"
 )
 
 const (
@@ -33,6 +34,9 @@ const content = `<!DOCTYPE html>
 
 func handler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-type", "text/html; charset=utf-8")
+
+	time.Sleep(1500 * time.Millisecond)
+
 	writeServerTimming(w, r)
 	w.WriteHeader(http.StatusOK)
 	io.WriteString(w, content)
@@ -45,11 +49,12 @@ const (
 
 func writeServerTimming(w http.ResponseWriter, r *http.Request) {
 	tt := [...]string{
-		"sec;desc=\"Security\";dur=0.2,",
-		"service-0;desc=\"Service 0\";dur=1.1,",
-		"service-1;desc=\"Service 1\";dur=.8,",
-		"db-1;desc=\"Database 1\";dur=.453,",
+		"sec;desc=\"Security\";dur=300,",
+		"service-0;desc=\"Service 0\";dur=1200,",
+		"service-1;desc=\"Service 1\";dur=700,",
+		"db-1;desc=\"Database 1\";dur=300,",
 	}
+
 	if _, ok := r.URL.Query()[perfQueryParam]; ok {
 		var b strings.Builder
 		for _, t := range tt {
